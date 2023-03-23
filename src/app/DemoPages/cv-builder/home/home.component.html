@@ -1,17 +1,27 @@
 <div class="main-card mb-3 card">
   <div class="card-body">
-    <div class="d-flex">
-      <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="list-group list-group-flush" orientation="vertical">
-        <li *ngFor="let tab of tabs; let i = index" ngbNavItem="{{tab.id}}" class="list-group-item">
-          <a ngbNavLink> <span class="badge badge-secondary badge-pill">{{i}}</span> {{ tab.label }} </a>
-          <ng-template ngbNavContent>
-            {{ active }}
-              <h2 class="text-center">Advanced Angular Dynamic Form</h2>
-              <app-dynamic-form [formFields]="formFields | async " (onSubmitChange)="onSubmit($event)"></app-dynamic-form>
-          </ng-template>
-        </li>
-      </ul>
-      <div [ngbNavOutlet]="nav" class="ms-4"></div>
-    </div> 
+    <ul ngbNav #nav="ngbNav" class="nav-pills">
+      <li *ngFor="let tab of tabs | keyvalue:keepOriginalOrder" ngbNavItem="{{tab.key}}">
+        <a ngbNavLink> <span class="badge badge-secondary badge-pill">{{i}}</span> {{ tab.value.label }} </a>
+        <ng-template ngbNavContent>
+          <h2 class="text-center">{{ tab.value.label }} </h2>
+          <app-dynamic-form [formFields]="tab.value.formFields | async " (onSubmitChange)="onSubmit($event)">
+          </app-dynamic-form>
+
+          <input type="button" class="btn btn-primary" value="Previous" (click)="clickPrev(tab.key)" />
+          <input type="button" class="btn btn-primary" value="Next" (click)="clickNext(tab.key)" />
+
+
+        </ng-template>
+      </li>
+    </ul>
+    <div class="d-flex justify-content-center">
+      <div class="col-lg-6">
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+    <div class="col-lg-6">
+      Preview
+    </div>
+    </div>
   </div>
 </div>
