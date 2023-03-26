@@ -58,15 +58,78 @@ export class HomeComponent implements OnInit {
 
   getHeadingFields() {
 
-    const inputs: FormField<string>[] = [
+    const inputs: FormField<any>[] = [
 
       new FormField<string>({
         controlType: "textbox",
-        key: 'name',
-        label: 'Name',
+        key: 'firstName',
+        label: 'First Name',
+        cssClass: 'col-md-6',
         required: true,
-        value: 'vinit solanki',
         order: 1
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'lastName',
+        label: 'Last Name',
+        cssClass: 'col-md-6',
+        required: true,
+        order: 2
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'profession',
+        label: 'Profession',
+        cssClass: 'col-md-12',
+        required: false,
+        order: 3
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'city',
+        label: 'City',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 4
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'state',
+        label: 'State/Region',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 5
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'country',
+        label: 'Country',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 6
+      }),
+
+      new FormField<number>({
+        controlType: "textbox",
+        key: 'postalCode',
+        label: 'Postal Code',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 7
+      }),
+
+      new FormField<number>({
+        controlType: "textbox",
+        key: 'Phone',
+        label: 'Phone',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 8
       }),
 
       new FormField<string>({
@@ -74,51 +137,51 @@ export class HomeComponent implements OnInit {
         key: 'email',
         label: 'Email',
         type: 'email',
-        required: true,
+        cssClass: 'col-md-6',
         validator: "email",
-        order: 2
-      }),
-
-      new FormField<string>({
-        controlType: "dropdown",
-        key: 'country',
-        label: 'Country',
-        options: [
-          {key: 'usa',  value: 'United States of America'},
-          {key: 'br',  value: 'Brazil'},
-          {key: 'other',   value: 'Other'}
-        ],
-        order: 3
-      }),
-
-      new FormField<string>({
-        controlType: "checkbox",
-        key: 'agree',
-        label: 'I accept terms and services',
-        type: 'checkbox',
-        required: true,
-        order: 4
-      }),
-
-      new FormField<string>({
-        controlType: "radio",
-        key: 'sex',
-        label: 'Sex',
-        type: 'radio',
-        options: [
-          {key: 'male',  value: 'Male'},
-          {key: 'female',  value: 'Female'}
-        ],
-        order: 5
-      }),
-
-      new FormField<string>({
-        controlType: "textarea",
-        key: 'message',
-        label: 'Mesage',
-        type: 'textarea',
-        order: 6
+        order: 9
       })
+
+      // new FormField<string>({
+      //   controlType: "dropdown",
+      //   key: 'country',
+      //   label: 'Country',
+      //   options: [
+      //     {key: 'usa',  value: 'United States of America'},
+      //     {key: 'br',  value: 'Brazil'},
+      //     {key: 'other',   value: 'Other'}
+      //   ],
+      //   order: 3
+      // }),
+
+      // new FormField<string>({
+      //   controlType: "checkbox",
+      //   key: 'agree',
+      //   label: 'I accept terms and services',
+      //   type: 'checkbox',
+      //   required: true,
+      //   order: 4
+      // }),
+
+      // new FormField<string>({
+      //   controlType: "radio",
+      //   key: 'sex',
+      //   label: 'Sex',
+      //   type: 'radio',
+      //   options: [
+      //     {key: 'male',  value: 'Male'},
+      //     {key: 'female',  value: 'Female'}
+      //   ],
+      //   order: 5
+      // }),
+
+      // new FormField<string>({
+      //   controlType: "textarea",
+      //   key: 'message',
+      //   label: 'Mesage',
+      //   type: 'textarea',
+      //   order: 6
+      // })
     ];
 
     return of(inputs.sort((a, b) => a.order - b.order));
@@ -130,12 +193,70 @@ export class HomeComponent implements OnInit {
 
       new FormField<string>({
         controlType: "textbox",
-        key: 'name',
-        label: 'Name',
-        required: true,
-        value: 'vinit solanki',
+        key: 'schoolName',
+        label: 'School Name',
+        cssClass: 'col-md-6',
         order: 1
       }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'fieldOfStudy',
+        label: 'Field of Study',
+        cssClass: 'col-md-6',
+        order: 2
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'city',
+        label: 'City',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 3
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'country',
+        label: 'Country',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 4
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'StartDate',
+        label: 'Start Date',
+        cssClass: 'col-md-6',
+        order: 5
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'endDate',
+        label: 'End Date',
+        cssClass: 'col-md-6',
+        order: 6
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'degree',
+        label: 'Degree',
+        cssClass: 'col-md-6',
+        order: 7
+      }),
+
+      new FormField<string>({
+        controlType: "checkbox",
+        key: 'currentSchool',
+        label: 'I currently attend here',
+        type: 'checkbox',
+        cssClass: 'col-md-6',
+        order: 8
+      })
 
     ];
 
@@ -149,32 +270,71 @@ export class HomeComponent implements OnInit {
 
       new FormField<string>({
         controlType: "textbox",
-        key: 'name',
-        label: 'Name',
-        required: true,
-        value: 'vinit solanki',
+        key: 'jobTitle',
+        label: 'Job Title',
+        cssClass: 'col-md-6',
         order: 1
       }),
 
       new FormField<string>({
-        controlType: "radio",
-        key: 'sex',
-        label: 'Sex',
-        type: 'radio',
-        options: [
-          {key: 'male',  value: 'Male'},
-          {key: 'female',  value: 'Female'}
-        ],
+        controlType: "textbox",
+        key: 'companyName',
+        label: 'Company Name',
+        cssClass: 'col-md-6',
+        order: 2
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'city',
+        label: 'City',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 3
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'country',
+        label: 'Country',
+        cssClass: 'col-md-6',
+        required: false,
+        order: 4
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'StartDate',
+        label: 'Start Date',
+        cssClass: 'col-md-6',
         order: 5
       }),
 
       new FormField<string>({
-        controlType: "textarea",
-        key: 'message',
-        label: 'Mesage',
-        type: 'textarea',
+        controlType: "textbox",
+        key: 'endDate',
+        label: 'End Date',
+        cssClass: 'col-md-6',
         order: 6
+      }),
+
+      new FormField<string>({
+        controlType: "checkbox",
+        key: 'currentCompany',
+        label: 'I currently work here',
+        type: 'checkbox',
+        cssClass: 'col-md-12',
+        order: 7
+      }),
+
+      new FormField<string>({
+        controlType: "textbox",
+        key: 'jobDescription',
+        label: 'Job Description',
+        cssClass: 'col-md-12',
+        order: 8
       })
+     
     ];
 
     return of(inputs.sort((a, b) => a.order - b.order));
