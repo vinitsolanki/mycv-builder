@@ -1,5 +1,7 @@
 <div class="main-card mb-3 card">
   <div class="card-body">
+
+
     <ul ngbNav #nav="ngbNav" class="nav-pills">
       <li *ngFor="let tab of tabs | keyvalue:keepOriginalOrder" ngbNavItem="{{tab.key}}">
         <a ngbNavLink> <span class="badge badge-secondary badge-pill">{{i}}</span> {{ tab.value.label }} </a>
