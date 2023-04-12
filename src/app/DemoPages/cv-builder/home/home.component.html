@@ -637,9 +637,11 @@
                     <ng-container *ngFor="let education of educationForm.get('educations')['controls']; let i = index"
                       formGroupName="{{i}}">
                       <li>
-                        <div class="date">{{ getStartYear(education) }} - {{ getEndYear(education) }}</div>
+                        <!-- <div class="date">{{ getStartYear(education) }} - {{ getEndYear(education) }}</div> -->
+                        <div class="date">{{education.value.startDate | date: 'yyyy' }} - {{education.value.endDate | date: 'yyyy' }} </div>
                         <div class="info">
-                          <p class="semi-bold"> {{ getFieldOfStudy(education)}}</p>
+                          <p class="semi-bold"> </p>
+                          <!-- <p class="semi-bold"> {{ getFieldOfStudy(education)}}</p> -->  
                           <p>{{ getDegree(education) }}, {{ getSchoolName(education) }}, {{ getCity(education) }}, {{ getCountry(education) }}</p>
                         </div>
                       </li>

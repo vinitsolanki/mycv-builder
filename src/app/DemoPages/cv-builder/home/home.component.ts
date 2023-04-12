@@ -100,26 +100,26 @@ export class HomeComponent implements OnInit {
     return val ? val : '[SchoolName]';
   }
 
-  public getStartYear(formControl: FormControl) : string {  
+  // public getStartYear(formControl: FormControl) : string {  
     
-    if(!formControl.value.startDate)
-    {
-      return '[StartYear]';
-    }
+  //   if(!formControl.value.startDate)
+  //   {
+  //     return '[StartYear]';
+  //   }
     
-    const val = new Date(formControl.value.startDate).getFullYear().toString();
-    return val ? val : '[StartYear]';
-  }
+  //   const val = new Date(formControl.value.startDate).getFullYear().toString();
+  //   return val ? val : '[StartYear]';
+  // }
 
-  public getEndYear(formControl: FormControl) : string {    
-    if(!formControl.value.endDate)
-    {
-      return '[EndYear]';
-    }
+  // public getEndYear(formControl: FormControl) : string {    
+  //   if(!formControl.value.endDate)
+  //   {
+  //     return '[EndYear]';
+  //   }
 
-    const val = new Date(formControl.value.endDate).getFullYear().toString();
-    return val ? val : '[EndYear]';
-  }
+  //   const val = new Date(formControl.value.endDate).getFullYear().toString();
+  //   return val ? val : '[EndYear]';
+  // }
 
   public getFieldOfStudy(formControl: FormControl) : string {    
     const val = formControl.value.fieldOfStudy;
@@ -212,7 +212,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cvBuilder = JSON.parse(localStorage.getItem('CvBuilder')) as CvBuilder;
+    this.cvBuilder = JSON.parse(localStorage.getItem('CvBuilder')) || {} as CvBuilder;
     console.log(this.cvBuilder)
     if (this.cvBuilder.personalDetail) {
       this.personalDetailForm.patchValue(this.cvBuilder.personalDetail);
