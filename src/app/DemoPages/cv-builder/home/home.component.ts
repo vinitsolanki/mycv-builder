@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormField } from '../dynamic-form/form-field';
 import { FormfieldControlService } from '../dynamic-form/formfield-control.service';
 import { of, Observable } from 'rxjs';
+import { CvBuilder } from '../CvBuilder';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import { of, Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   active = 'personalDetail';
+
+  private cvBuilder;
 
   tabs = {
     personalDetail: {
@@ -42,6 +45,101 @@ export class HomeComponent implements OnInit {
       formFields: this.getHeadingFields()
     }
   };
+
+  public get firstName() {
+    if (this.personalDetailForm.value.firstName)
+      return this.personalDetailForm.value.firstName;
+    else
+      return '[Full Name]';
+  }
+
+  public get lastName() {
+    if (this.personalDetailForm.value.lastName)
+      return this.personalDetailForm.value.lastName;
+    else
+      return '';
+  }
+
+  public get profession() {
+    const val = this.personalDetailForm.value.profession;
+    return val ? val : '[Profession]'
+  }
+
+  public get city() {
+    const val = this.personalDetailForm.value.city;
+    return val ? val : '[City]'
+  }
+
+  public get state() {
+    const val = this.personalDetailForm.value.state;
+    return val ? val : '[State]'
+  }
+
+  public get country() {
+    const val = this.personalDetailForm.value.country;
+    return val ? val : '[Country]'
+  }
+
+  public get postalCode() {
+    const val = this.personalDetailForm.value.postalCode;
+    return val ? val : '[PostalCode]'
+  }
+
+  public get phone() {
+    const val = this.personalDetailForm.value.phone;
+    return val ? val : '[Phone]'
+  }
+
+  public get email() {
+    const val = this.personalDetailForm.value.email;
+    return val ? val : '[Email]'
+  }
+
+  public getSchoolName(formControl: FormControl) : string {    
+    const val = formControl.value.schoolName;
+    return val ? val : '[SchoolName]';
+  }
+
+  public getStartYear(formControl: FormControl) : string {  
+    
+    if(!formControl.value.startDate)
+    {
+      return '[StartYear]';
+    }
+    
+    const val = new Date(formControl.value.startDate).getFullYear().toString();
+    return val ? val : '[StartYear]';
+  }
+
+  public getEndYear(formControl: FormControl) : string {    
+    if(!formControl.value.endDate)
+    {
+      return '[EndYear]';
+    }
+
+    const val = new Date(formControl.value.endDate).getFullYear().toString();
+    return val ? val : '[EndYear]';
+  }
+
+  public getFieldOfStudy(formControl: FormControl) : string {    
+    const val = formControl.value.fieldOfStudy;
+    return val ? val : '[FieldOfStudy]';
+  }
+
+  public getCity(formControl: FormControl) : string {    
+    const val = formControl.value.city;
+    return val ? val : '[City]';
+  }
+
+  public getCountry(formControl: FormControl) : string {    
+    const val = formControl.value.country;
+    return val ? val : '[Country]';
+  }
+
+  public getDegree(formControl: FormControl) : string {    
+    const val = formControl.value.degree;
+    return val ? val : '[Degree]';
+  }
 
   public personalDetailForm: FormGroup = this.formBuilder.group({
     firstName: ['', Validators.required],
@@ -105,7 +203,7 @@ export class HomeComponent implements OnInit {
 
   formFields: Observable<FormField<any>[]>;
 
-  constructor(private modalService: NgbModal, 
+  constructor(private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
@@ -114,6 +212,34 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cvBuilder = JSON.parse(localStorage.getItem('CvBuilder')) as CvBuilder;
+    console.log(this.cvBuilder)
+    if (this.cvBuilder.personalDetail) {
+      this.personalDetailForm.patchValue(this.cvBuilder.personalDetail);
+    }
+    if (this.cvBuilder.education) {
+      this.cvBuilder.education.educations.forEach((educationData, index) => {
+        if (index <= this.cvBuilder.education.educations.length - 1) {
+          if (index === 0) {
+            // Deleted default empty form
+            this.removeForm(index, this.educationForm, 'educations');
+          }
+
+          (this.educationForm.get('educations') as FormArray).push(this.formBuilder.group({
+            schoolName: [educationData.schoolName, Validators.required],
+            fieldOfStudy: [educationData.fieldOfStudy, Validators.required],
+            city: [educationData.city],
+            country: [educationData.country],
+            startDate: [educationData.startDate],
+            endDate: [educationData.endDate],
+            degree: [educationData.degree],
+            isAttended: [educationData.isAttended]
+          }));
+        }
+      })
+    }
+
+
   }
 
   onSubmit() {
@@ -172,7 +298,7 @@ export class HomeComponent implements OnInit {
     }));
   }
 
-  removeForm(index: number, form: FormGroup, controlName: string ) {
+  removeForm(index: number, form: FormGroup, controlName: string) {
     const control = <FormArray>form.controls[controlName];
     control.removeAt(index);
   }
@@ -461,14 +587,44 @@ export class HomeComponent implements OnInit {
     return of(inputs.sort((a, b) => a.order - b.order));
   }
 
-  clickNext(active: any) {
+  clickNext(activeTab: any) {
     let keys = Object.keys(this.tabs);
-    let nextIndex = keys.indexOf(active) + 1;
+    let nextIndex = keys.indexOf(activeTab) + 1;
     let nextItem = keys[nextIndex];
     //this.active = nextItem;
     this.nav.select(nextItem);
+
+    switch (activeTab) {
+      case 'personalDetail':
+        this.cvBuilder.personalDetail = this.personalDetailForm.value;
+        break
+      case 'education':
+        this.cvBuilder.education = this.educationForm.value;
+        break
+    }
+
+    localStorage.setItem("CvBuilder", JSON.stringify(this.cvBuilder));
   }
 
+  resetForm(tab: string) {
+    switch (tab) {
+      case 'personalDetail':
+        this.personalDetailForm.reset();
+        this.cvBuilder.personalDetail = '';
+        break
+      case 'education':
+        this.educationForm.reset();
+        this.cvBuilder.education = '';
+        const educationFormArr = <FormArray>this.educationForm.controls['educations'];
+        educationFormArr.controls.forEach((educationData, index) => {
+          if (index !== 0) {
+            this.removeForm(index, this.educationForm, 'educations');
+          }
+        })
+        break
+    }
+    localStorage.setItem("CvBuilder", JSON.stringify(this.cvBuilder));
+  }
 
   @ViewChild("nav")
   nav;
