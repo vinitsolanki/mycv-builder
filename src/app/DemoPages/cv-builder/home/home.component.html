@@ -6,24 +6,437 @@
       <li *ngFor="let tab of tabs | keyvalue:keepOriginalOrder" ngbNavItem="{{tab.key}}">
         <a ngbNavLink> <span class="badge badge-secondary badge-pill">{{i}}</span> {{ tab.value.label }} </a>
         <ng-template ngbNavContent>
-          <h2 class="text-center">{{ tab.value.label }} </h2>
-          <app-dynamic-form [formFields]="tab.value.formFields | async " (onSubmitChange)="onSubmit($event)">
-          </app-dynamic-form>
+          <div [ngSwitch]="tab.value.id">
+            <div *ngSwitchCase="'personalDetail'">
 
-          <input type="button" class="btn btn-primary" value="Previous" (click)="clickPrev(tab.key)" />
-          <input type="button" class="btn btn-primary" value="Next" (click)="clickNext(tab.key)" />
+              <h2>
+                <div>Introduce yourself first</div>
+              </h2>
+              <h5>
+                <div>Your description</div>
+              </h5>
+
+              <form [formGroup]="personalDetailForm" (ngSubmit)="onSubmit()" class="row">
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" formControlName="firstName" id="firstName">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" formControlName="lastName" id="lastName">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Profession</label>
+                    <input type="text" class="form-control" formControlName="profession" id="profession">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>City</label>
+                    <input type="text" class="form-control" formControlName="city" id="city">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>State/Region</label>
+                    <input type="text" class="form-control" formControlName="state" id="state">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" class="form-control" formControlName="country" id="country">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Postal Code</label>
+                    <input type="text" class="form-control" formControlName="postalCode" id="postalCode">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" class="form-control" formControlName="phone" id="phone">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" formControlName="email" id="email">
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="clearfix">
+                  <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="personalDetailForm.invalid">Save</button>
+
+                  <button type="button" id="next-btn"
+                    class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
+                    [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                  <button type="button" id="prev-btn"
+                    class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
+                    [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
+                </div>
+
+              </form>
+            </div>
+
+            <div *ngSwitchCase="'education'">
+
+              <h2>
+                <div>Tell us about your education</div>
+              </h2>
+              <h5>
+                <div>Your description</div>
+              </h5>
+
+              <form [formGroup]="educationForm" (ngSubmit)="onSubmit()" class="row">
+                <ng-container formArrayName="educations">
+                  <ng-container *ngFor="let education of educationForm.get('educations')['controls']; let i = index"
+                    formGroupName="{{i}}">
+                    <div class="form-inline">
+                      <label><strong>Education: #{{i+1}}</strong></label>
+                      <label>
+                        <button class="mb-2 mr-2 border-0 btn-transition btn btn-outline-danger" [hidden]="i==0"
+                          (click)="removeForm(i,educationForm, 'educations')">Remove </button>
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>School Name</label>
+                        <input type="text" class="form-control" formControlName="schoolName" id="schoolName">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Field Of Study</label>
+                        <input type="text" class="form-control" formControlName="fieldOfStudy" id="fieldOfStudy">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" formControlName="city" id="city">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" formControlName="country" id="country">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" class="form-control" formControlName="startDate" id="startDate">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" class="form-control" formControlName="endDate" id="endDate">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Degree</label>
+                        <input type="text" class="form-control" formControlName="degree" id="degree">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <input type="checkbox" class="form-check-input" formControlName="isAttended" id="isAttended">
+                        <label class="form-check-label">I currently attended here</label>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <button type="button" (click)="addEducation()" class="btn-shadow float-left btn btn-primary">Add
+                      Education</button>
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="clearfix">
+                  <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="educationForm.invalid">Save</button>
+
+                  <button type="button" id="next-btn"
+                    class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
+                    [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                  <button type="button" id="prev-btn"
+                    class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
+                    [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
+                </div>
+              </form>
+            </div>
+
+            <div *ngSwitchCase="'workHistory'">
+              <h2>
+                <div>Tell us about your work experience</div>
+              </h2>
+              <h5>
+                <div>Your description</div>
+              </h5>
+
+              <form [formGroup]="workHistoryForm" (ngSubmit)="onSubmit()" class="row">
+                <ng-container formArrayName="workHistorys">
+                  <ng-container
+                    *ngFor="let workHistory of workHistoryForm.get('workHistorys')['controls']; let i = index"
+                    formGroupName="{{i}}">
+                    <div class="form-inline">
+                      <label><strong>Work Experience: #{{i+1}}</strong></label>
+                      <label>
+                        <button class="mb-2 mr-2 border-0 btn-transition btn btn-outline-danger" [hidden]="i==0"
+                          (click)="removeForm(i, workHistoryForm, 'workHistorys')">Remove </button>
+                      </label>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" class="form-control" formControlName="jobTitle" id="jobTitle">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" class="form-control" formControlName="companyName" id="companyName">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>City</label>
+                        <input type="text" class="form-control" formControlName="city" id="city">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Country</label>
+                        <input type="text" class="form-control" formControlName="country" id="country">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="text" class="form-control" formControlName="startDate" id="startDate">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>End Date</label>
+                        <input type="text" class="form-control" formControlName="endDate" id="endDate">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <input type="checkbox" class="form-check-input" formControlName="isWorkingHere"
+                          id="isWorkingHere">
+                        <label class="form-check-label">I currently work here</label>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>Job Description</label>
+                        <textarea type="text" class="form-control" formControlName="jobDesc" id="jobDesc"></textarea>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <button type="button" (click)="addWorkExperience()"
+                      class="btn-shadow float-left btn btn-primary">Add
+                      Work Experience</button>
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="clearfix">
+                  <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="workHistoryForm.invalid">Save</button>
+
+                  <button type="button" id="next-btn"
+                    class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
+                    [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                  <button type="button" id="prev-btn"
+                    class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
+                    [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
+                </div>
+
+              </form>
+            </div>
+
+            <div *ngSwitchCase="'skills'">
+              <h2>
+                <div>Which skills would you like to emphasize?</div>
+              </h2>
+              <h5>
+                <div>Skill description</div>
+              </h5>
+
+              <form [formGroup]="skillCategoryFormGrp" (ngSubmit)="onSubmit()" class="row">
+                <ng-container formArrayName="skillCategorys">
+                  <ng-container
+                    *ngFor="let skillCategory of skillCategoryFormGrp.get('skillCategorys')['controls']; let i = index"
+                    formGroupName="{{i}}">
+
+                    <div class="form-inline">
+                      <label><strong>Skill Category: #{{i+1}}</strong></label>
+                      <label>
+                        <button class="mb-2 mr-2 border-0 btn-transition btn btn-outline-danger" [hidden]="i==0"
+                          (click)="removeForm(i,skillCategoryFormGrp, 'skillCategorys')">Remove </button>
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label>Skill category name</label>
+                        <input type="text" class="form-control" formControlName="skillCategoryName"
+                          id="SkillCategoryName">
+                      </div>
+                    </div>
+                    <div class="row"></div>
+                    <ng-container formArrayName="skills">
+                      <ng-container *ngFor="let skill of skillCategory.get('skills')['controls']; let j = index"
+                        formGroupName="{{j}}">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Skill name</label>
+                            <input type="text" class="form-control" formControlName="skillName" id="skillName">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Skill level</label>
+                            <input type="text" class="form-control" formControlName="skillLevel" id="skillLevel">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <label id="skillRemoveLbl">
+                            <button class="mb-2 mr-2 border-0 btn-transition btn btn-outline-danger" [hidden]="j==0"
+                              (click)="removeForm(j,skillCategory, 'skills')">Remove </button>
+                          </label>
+                        </div>
+                      </ng-container></ng-container>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-9">
+                      <div class="form-group">
+                        <button type="button" (click)="addSkill(skillCategory)"
+                          class="btn-shadow float-left btn btn-primary">Add
+                          Skill</button>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <button type="button" (click)="addSkillCategory()" class="btn-shadow float-left btn btn-primary">Add
+                      Skill Category</button>
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="clearfix">
+                  <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="skillCategoryFormGrp.invalid">Save</button>
+
+                  <button type="button" id="next-btn"
+                    class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
+                    [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                  <button type="button" id="prev-btn"
+                    class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
+                    [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
+                </div>
+              </form>
+
+            </div>
+
+            <div *ngSwitchCase="'summary'">
+              <h2>
+                <div>Provide a brief overview of your background</div>
+              </h2>
+              <h5>
+                <div>Background description</div>
+              </h5>
+
+              <form [formGroup]="summaryForm" (ngSubmit)="onSubmit()" class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Job Description</label>
+                    <textarea type="text" class="form-control" formControlName="summaryDesc"
+                      id="summaryDesc"></textarea>
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="clearfix">
+                  <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="summaryForm.invalid">Save</button>
+
+                  <button type="button" id="next-btn"
+                    class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
+                    [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                  <button type="button" id="prev-btn"
+                    class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
+                    [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
+                </div>
+
+              </form>
 
 
+            </div>
+
+            <div *ngSwitchCase="'finalize'">
+              <h2>
+                <div>Finalize your cv.</div>
+              </h2>
+              <h5>
+                <div>CV description</div>
+              </h5>
+
+              <div class="divider"></div>
+
+              <div class="clearfix">
+                <button type="submit" class="btn-shadow float-left btn btn-primary"
+                  [disabled]="summaryForm.invalid">Save</button>
+                <button type="button" id="next-btn"
+                  class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
+                  [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                <button type="button" id="prev-btn"
+                  class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
+                  [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
+              </div>
+            </div>
+          </div>
         </ng-template>
       </li>
     </ul>
     <div class="d-flex justify-content-center">
       <div class="col-lg-6">
-      <div [ngbNavOutlet]="nav"></div>
-    </div>
-    <div class="col-lg-6">
-      Preview
-    </div>
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+      <div class="col-lg-6">
+        Preview
+      </div>
     </div>
   </div>
 </div>

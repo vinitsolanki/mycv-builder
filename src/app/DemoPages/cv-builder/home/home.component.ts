@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormField } from '../dynamic-form/form-field';
@@ -7,53 +7,174 @@ import { FormfieldControlService } from '../dynamic-form/formfield-control.servi
 import { of, Observable } from 'rxjs';
 
 @Component({
-	selector: 'app-home',
-	templateUrl: './home.component.html',
-  styleUrls: ['./home.component.sass'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
   providers: [FormfieldControlService]
 })
 export class HomeComponent implements OnInit {
-  active = 'heading';
+  active = 'personalDetail';
 
-  tabs = { 
-    heading : {
-    id: 'heading',
-    label: 'HEADING',
-    formFields: this.getHeadingFields()
-  }, education: {
-    id: 'education',
-    label: 'EDUCATION',
-    formFields: this.getEducationFields()
-  }, workHistory: {
-    id: 'workHistory',
-    label: 'WORK HISTORY',
-    formFields: this.getWorkHistoryFields()
-  }, skills: {
-    id: 'skills',
-    label: 'SKILLS',
-    formFields: this.getHeadingFields()
-  }, summary: {
-    id: 'summary',
-    label: 'SUMMARY',
-    formFields: this.getHeadingFields()
-  }, finalize: {
-    id: 'finalize',
-    label: 'FINALIZE',
-    formFields: this.getHeadingFields()
-  }};
+  tabs = {
+    personalDetail: {
+      id: 'personalDetail',
+      label: 'Personal Details',
+      formFields: this.getHeadingFields()
+    }, education: {
+      id: 'education',
+      label: 'EDUCATION',
+      formFields: this.getEducationFields()
+    }, workHistory: {
+      id: 'workHistory',
+      label: 'WORK HISTORY',
+      formFields: this.getWorkHistoryFields()
+    }, skills: {
+      id: 'skills',
+      label: 'SKILLS',
+      formFields: this.getHeadingFields()
+    }, summary: {
+      id: 'summary',
+      label: 'SUMMARY',
+      formFields: this.getHeadingFields()
+    }, finalize: {
+      id: 'finalize',
+      label: 'FINALIZE',
+      formFields: this.getHeadingFields()
+    }
+  };
+
+  public personalDetailForm: FormGroup = this.formBuilder.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    profession: [''],
+    city: [''],
+    state: [''],
+    country: [''],
+    postalCode: [''],
+    phone: [''],
+    email: ['', Validators.email]
+  });
+
+  private education: FormGroup = this.formBuilder.group({
+    schoolName: ['', Validators.required],
+    fieldOfStudy: ['', Validators.required],
+    city: [''],
+    country: [''],
+    startDate: [''],
+    endDate: [''],
+    degree: [''],
+    isAttended: [false]
+  })
+
+  public educationForm: FormGroup = this.formBuilder.group({
+    educations: this.formBuilder.array([this.education])
+  });
+
+  private workHistory: FormGroup = this.formBuilder.group({
+    jobTitle: ['', Validators.required],
+    companyName: ['', Validators.required],
+    city: [''],
+    country: [''],
+    startDate: [''],
+    endDate: [''],
+    isWorkingHere: [false],
+    jobDesc: ['']
+  });
+
+  public workHistoryForm: FormGroup = this.formBuilder.group({
+    workHistorys: this.formBuilder.array([this.workHistory])
+  });
+
+  private skill: FormGroup = this.formBuilder.group({
+    skillName: ['', Validators.required],
+    skillLevel: ['', Validators.required]
+  })
+
+  private skillCategoryForm: FormGroup = this.formBuilder.group({
+    skillCategoryName: ['', Validators.required],
+    skills: this.formBuilder.array([this.skill])
+  });
+
+  public skillCategoryFormGrp: FormGroup = this.formBuilder.group({
+    skillCategorys: this.formBuilder.array([this.skillCategoryForm])
+  });
+
+  public summaryForm: FormGroup = this.formBuilder.group({
+    summaryDesc: ['', Validators.required]
+  })
 
   formFields: Observable<FormField<any>[]>;
-  
-  constructor(private modalService: NgbModal, private formBuilder: UntypedFormBuilder, private route: ActivatedRoute, private router: Router, service: FormfieldControlService) {
+
+  constructor(private modalService: NgbModal, 
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    service: FormfieldControlService) {
     this.formFields = service.getFormFields();
   }
 
   ngOnInit(): void {
-    
   }
 
-  onSubmit(value: any) {
-    alert(value);
+  onSubmit() {
+    console.log(this.educationForm.value);
+    console.log(this.workHistoryForm.value);
+    console.log(this.skillCategoryFormGrp.value);
+    console.log(this.summaryForm.value);
+  }
+
+  addEducation() {
+    const control = <FormArray>this.educationForm.controls['educations'];
+    control.push(
+      this.formBuilder.group({
+        schoolName: ['', Validators.required],
+        fieldOfStudy: ['', Validators.required],
+        city: [''],
+        country: [''],
+        startDate: [''],
+        endDate: [''],
+        degree: [''],
+        isAttended: [false]
+      })
+    );
+  }
+
+  addWorkExperience() {
+    const control = <FormArray>this.workHistoryForm.controls['workHistorys'];
+    control.push(this.formBuilder.group({
+      jobTitle: ['', Validators.required],
+      companyName: ['', Validators.required],
+      city: [''],
+      country: [''],
+      startDate: [''],
+      endDate: [''],
+      isWorkingHere: [false],
+      jobDesc: ['']
+    }));
+  }
+
+  addSkill(skillCategory: any) {
+    const control = <FormArray>skillCategory.controls['skills'];
+    control.push(this.formBuilder.group({
+      skillName: ['', Validators.required],
+      skillLevel: ['', Validators.required]
+    }));
+  }
+
+  addSkillCategory() {
+    const control = <FormArray>this.skillCategoryFormGrp.controls['skillCategorys'];
+    control.push(this.formBuilder.group({
+      skillCategoryName: ['', Validators.required],
+      skills: this.formBuilder.array([this.formBuilder.group({
+        skillName: ['', Validators.required],
+        skillLevel: ['', Validators.required]
+      })])
+    }));
+  }
+
+  removeForm(index: number, form: FormGroup, controlName: string ) {
+    const control = <FormArray>form.controls[controlName];
+    control.removeAt(index);
   }
 
   getHeadingFields() {
@@ -334,7 +455,7 @@ export class HomeComponent implements OnInit {
         cssClass: 'col-md-12',
         order: 8
       })
-     
+
     ];
 
     return of(inputs.sort((a, b) => a.order - b.order));
@@ -342,7 +463,7 @@ export class HomeComponent implements OnInit {
 
   clickNext(active: any) {
     let keys = Object.keys(this.tabs);
-    let nextIndex = keys.indexOf(active) +1;
+    let nextIndex = keys.indexOf(active) + 1;
     let nextItem = keys[nextIndex];
     //this.active = nextItem;
     this.nav.select(nextItem);
@@ -351,10 +472,10 @@ export class HomeComponent implements OnInit {
 
   @ViewChild("nav")
   nav;
-  
+
   clickPrev(active: any) {
     let keys = Object.keys(this.tabs);
-    let prevIndex = keys.indexOf(active) -1;
+    let prevIndex = keys.indexOf(active) - 1;
     let prevItem = keys[prevIndex];
     //this.active = prevItem;
     this.nav.select(prevItem);
