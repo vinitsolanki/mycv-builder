@@ -1,7 +1,5 @@
 <div class="main-card mb-3 card">
   <div class="card-body">
-
-
     <ul ngbNav #nav="ngbNav" class="nav-pills">
       <li *ngFor="let tab of tabs | keyvalue:keepOriginalOrder" ngbNavItem="{{tab.key}}">
         <a ngbNavLink> <span class="badge badge-secondary badge-pill">{{i}}</span> {{ tab.value.label }} </a>
@@ -16,7 +14,7 @@
                 <div>Your description</div>
               </h5>
 
-              <form [formGroup]="personalDetailForm" (ngSubmit)="onSubmit()" class="row">
+              <form [formGroup]="personalDetailForm" class="row">
 
                 <div class="col-md-6">
                   <div class="form-group">
@@ -76,8 +74,8 @@
                 <div class="divider"></div>
 
                 <div class="clearfix">
-                  <button type="submit" class="btn-shadow float-left btn btn-primary"
-                    [disabled]="personalDetailForm.invalid">Save</button>
+                  <!-- <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="personalDetailForm.invalid">Save</button> -->
                   <button type="button" id="reset-btn" class="btn-shadow float-left btn btn-link"
                     (click)="resetForm(tab.value.id)">Reset</button>
                   <button type="button" id="next-btn"
@@ -100,7 +98,7 @@
                 <div>Your description</div>
               </h5>
 
-              <form [formGroup]="educationForm" (ngSubmit)="onSubmit()" class="row">
+              <form [formGroup]="educationForm" class="row">
                 <ng-container formArrayName="educations">
                   <ng-container *ngFor="let education of educationForm.get('educations')['controls']; let i = index"
                     formGroupName="{{i}}">
@@ -172,8 +170,8 @@
                 <div class="divider"></div>
 
                 <div class="clearfix">
-                  <button type="submit" class="btn-shadow float-left btn btn-primary"
-                    [disabled]="educationForm.invalid">Save</button>
+                  <!-- <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="educationForm.invalid">Save</button> -->
                   <button type="button" id="reset-btn" class="btn-shadow float-left btn btn-link"
                     (click)="resetForm(tab.value.id)">Reset</button>
                   <button type="button" id="next-btn"
@@ -194,7 +192,7 @@
                 <div>Your description</div>
               </h5>
 
-              <form [formGroup]="workHistoryForm" (ngSubmit)="onSubmit()" class="row">
+              <form [formGroup]="workHistoryForm" class="row">
                 <ng-container formArrayName="workHistorys">
                   <ng-container
                     *ngFor="let workHistory of workHistoryForm.get('workHistorys')['controls']; let i = index"
@@ -234,13 +232,13 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>Start Date</label>
-                        <input type="text" class="form-control" formControlName="startDate" id="startDate">
+                        <input type="date" class="form-control" formControlName="startDate" id="startDate">
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label>End Date</label>
-                        <input type="text" class="form-control" formControlName="endDate" id="endDate">
+                        <input type="date" class="form-control" formControlName="endDate" id="endDate">
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -270,9 +268,10 @@
                 <div class="divider"></div>
 
                 <div class="clearfix">
-                  <button type="submit" class="btn-shadow float-left btn btn-primary"
-                    [disabled]="workHistoryForm.invalid">Save</button>
-
+                  <!-- <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="workHistoryForm.invalid">Save</button> -->
+                  <button type="button" id="reset-btn" class="btn-shadow float-left btn btn-link"
+                    (click)="resetForm(tab.value.id)">Reset</button>
                   <button type="button" id="next-btn"
                     class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
                     [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
@@ -292,7 +291,7 @@
                 <div>Skill description</div>
               </h5>
 
-              <form [formGroup]="skillCategoryFormGrp" (ngSubmit)="onSubmit()" class="row">
+              <form [formGroup]="skillCategoryFormGrp" class="row">
                 <ng-container formArrayName="skillCategorys">
                   <ng-container
                     *ngFor="let skillCategory of skillCategoryFormGrp.get('skillCategorys')['controls']; let i = index"
@@ -357,9 +356,10 @@
                 <div class="divider"></div>
 
                 <div class="clearfix">
-                  <button type="submit" class="btn-shadow float-left btn btn-primary"
-                    [disabled]="skillCategoryFormGrp.invalid">Save</button>
-
+                  <!-- <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="skillCategoryFormGrp.invalid">Save</button> -->
+                  <button type="button" id="reset-btn" class="btn-shadow float-left btn btn-link"
+                    (click)="resetForm(tab.value.id)">Reset</button>
                   <button type="button" id="next-btn"
                     class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
                     [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
@@ -379,7 +379,7 @@
                 <div>Background description</div>
               </h5>
 
-              <form [formGroup]="summaryForm" (ngSubmit)="onSubmit()" class="row">
+              <form [formGroup]="summaryForm" class="row">
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Job Description</label>
@@ -391,9 +391,10 @@
                 <div class="divider"></div>
 
                 <div class="clearfix">
-                  <button type="submit" class="btn-shadow float-left btn btn-primary"
-                    [disabled]="summaryForm.invalid">Save</button>
-
+                  <!-- <button type="submit" class="btn-shadow float-left btn btn-primary"
+                    [disabled]="summaryForm.invalid">Save</button> -->
+                  <button type="button" id="reset-btn" class="btn-shadow float-left btn btn-link"
+                    (click)="resetForm(tab.value.id)">Reset</button>
                   <button type="button" id="next-btn"
                     class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
                     [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
@@ -418,11 +419,7 @@
               <div class="divider"></div>
 
               <div class="clearfix">
-                <button type="submit" class="btn-shadow float-left btn btn-primary"
-                  [disabled]="summaryForm.invalid">Save</button>
-                <button type="button" id="next-btn"
-                  class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary"
-                  [hidden]="tab.value.id == 'finalize'" (click)="clickNext(tab.key)">Next</button>
+                <button type="button"(click)="onSubmit()" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Save</button>
                 <button type="button" id="prev-btn"
                   class="btn-shadow float-right btn-wide btn-pill mr-3 btn btn-outline-secondary"
                   [hidden]="tab.value.id == 'personalDetail'" (click)="clickPrev(tab.key)">Previous</button>
@@ -437,15 +434,7 @@
         <div [ngbNavOutlet]="nav"></div>
       </div>
       <div class="col-lg-6">
-        <!-- Preview -->
-
-        <!-- <head> -->
-        <!-- <meta charset="UTF-8">
-          <title>Resume/CV Design</title> -->
-        <!-- <link rel="stylesheet" href="styles.css"> -->
         <!-- <script src="https://kit.fontawesome.com/b99e675b6e.js"></script> -->
-        <!-- </head> -->
-        <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
         <div class="resume">
           <div class="resume_left">
             <div class="resume_profile">
@@ -483,67 +472,42 @@
                       {{email}}
                     </div>
                   </li>
-                  <!-- <li>
-                    <div class="icon">
-                      <i class="fab fa-weebly"></i>
-                    </div>
-                    <div class="data">
-                      www.stephen.com
-                    </div>
-                  </li> -->
                 </ul>
               </div>
               <div class="resume_item resume_skills">
-                <div class="title">
+                <div class="title m-b-5">
                   <p class="bold">skill's</p>
                 </div>
-                <ul>
-                  <li>
-                    <div class="skill_name">
-                      HTML
-                    </div>
-                    <div class="skill_progress">
-                      <span style="width: 80%;"></span>
-                    </div>
-                    <div class="skill_per">80%</div>
-                  </li>
-                  <li>
-                    <div class="skill_name">
-                      CSS
-                    </div>
-                    <div class="skill_progress">
-                      <span style="width: 70%;"></span>
-                    </div>
-                    <div class="skill_per">70%</div>
-                  </li>
-                  <li>
-                    <div class="skill_name">
-                      SASS
-                    </div>
-                    <div class="skill_progress">
-                      <span style="width: 90%;"></span>
-                    </div>
-                    <div class="skill_per">90%</div>
-                  </li>
-                  <li>
-                    <div class="skill_name">
-                      JS
-                    </div>
-                    <div class="skill_progress">
-                      <span style="width: 60%;"></span>
-                    </div>
-                    <div class="skill_per">60%</div>
-                  </li>
-                  <li>
-                    <div class="skill_name">
-                      JQUERY
-                    </div>
-                    <div class="skill_progress">
-                      <span style="width: 88%;"></span>
-                    </div>
-                    <div class="skill_per">88%</div>
-                  </li>
-                </ul>
+                <form [formGroup]="skillCategoryFormGrp">
+                  <ng-container formArrayName="skillCategorys">
+                    <ng-container
+                      *ngFor="let skillCategory of skillCategoryFormGrp.get('skillCategorys')['controls']; let i = index"
+                      formGroupName="{{i}}">
+                      <div class="title m-b-5">
+                        <p class="regular m-b-5">{{ getSkillCategoryName(skillCategory) }}</p>
+                      </div>
+
+                      <ul>
+                        <ng-container formArrayName="skills">
+                          <ng-container *ngFor="let skill of skillCategory.get('skills')['controls']; let j = index"
+                            formGroupName="{{j}}">
+                            <li>
+                              <div class="skill_name">
+                                {{ getSkillName(skill) }}
+                              </div>
+                              <div class="skill_progress">
+                                <span [ngStyle]="{'width': skill.value.skillLevel + '0%'}"></span>
+                              </div>
+                              <div class="skill_per">{{skill.value.skillLevel }}0%</div>
+                            </li>
+                          </ng-container>
+                        </ng-container>
+
+                      </ul>
+                    </ng-container>
+                  </ng-container>
+                </form>
+
               </div>
               <div class="resume_item resume_social">
                 <div class="title">
@@ -595,35 +559,30 @@
               <div class="title">
                 <p class="bold">About us</p>
               </div>
-              <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Perspiciatis illo fugit officiis distinctio
-                culpa officia totam atque exercitationem inventore repudiandae?</p>
+              <p>{{summaryForm.value.summaryDesc || '[Overview]'}}</p>
             </div>
             <div class="resume_item resume_work">
               <div class="title">
                 <p class="bold">Work Experience</p>
               </div>
               <ul>
-                <li>
-                  <div class="date">2013 - 2015</div>
-                  <div class="info">
-                    <p class="semi-bold">Lorem ipsum dolor sit amet.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                  </div>
-                </li>
-                <li>
-                  <div class="date">2015 - 2017</div>
-                  <div class="info">
-                    <p class="semi-bold">Lorem ipsum dolor sit amet.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                  </div>
-                </li>
-                <li>
-                  <div class="date">2017 - Present</div>
-                  <div class="info">
-                    <p class="semi-bold">Lorem ipsum dolor sit amet.</p>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, voluptatibus!</p>
-                  </div>
-                </li>
+                <form [formGroup]="workHistoryForm">
+                  <ng-container formArrayName="workHistorys">
+                    <ng-container
+                      *ngFor="let workHistory of workHistoryForm.get('workHistorys')['controls']; let i = index"
+                      formGroupName="{{i}}">
+                      <li>
+                        <div class="date">{{ (workHistory.value.startDate | date: 'yyyy') || '[StartYear]' }} -
+                          {{ (workHistory.value.endDate | date: 'yyyy') || '[EndYear]' }}</div>
+                        <div class="info">
+                          <p class="semi-bold">{{ getJobTitle(workHistory) }}, {{ getCompanyName(workHistory) }}, {{
+                            getCity(workHistory) }}, {{ getCountry(workHistory) }}</p>
+                          <p> {{ getJobDesc(workHistory) }}</p>
+                        </div>
+                      </li>
+                    </ng-container>
+                  </ng-container>
+                </form>
               </ul>
             </div>
             <div class="resume_item resume_education">
@@ -638,11 +597,13 @@
                       formGroupName="{{i}}">
                       <li>
                         <!-- <div class="date">{{ getStartYear(education) }} - {{ getEndYear(education) }}</div> -->
-                        <div class="date">{{education.value.startDate | date: 'yyyy' }} - {{education.value.endDate | date: 'yyyy' }} </div>
+                        <div class="date">{{ (education.value.startDate | date: 'yyyy') || '[StartYear]' }} -
+                          {{ (education.value.endDate | date: 'yyyy') || '[EndYear]' }} </div>
                         <div class="info">
                           <p class="semi-bold"> </p>
-                          <!-- <p class="semi-bold"> {{ getFieldOfStudy(education)}}</p> -->  
-                          <p>{{ getDegree(education) }}, {{ getSchoolName(education) }}, {{ getCity(education) }}, {{ getCountry(education) }}</p>
+                          <!-- <p class="semi-bold"> {{ getFieldOfStudy(education)}}</p> -->
+                          <p>{{ getDegree(education) }}, {{ getSchoolName(education) }}, {{ getCity(education) }}, {{
+                            getCountry(education) }}</p>
                         </div>
                       </li>
                     </ng-container>

@@ -15,34 +15,29 @@ import { CvBuilder } from '../CvBuilder';
 })
 export class HomeComponent implements OnInit {
   active = 'personalDetail';
+  public keepOriginalOrder = (a, b) => a.key;
 
   private cvBuilder;
 
   tabs = {
     personalDetail: {
       id: 'personalDetail',
-      label: 'Personal Details',
-      formFields: this.getHeadingFields()
-    }, education: {
-      id: 'education',
-      label: 'EDUCATION',
-      formFields: this.getEducationFields()
+      label: 'Personal Details'
     }, workHistory: {
       id: 'workHistory',
-      label: 'WORK HISTORY',
-      formFields: this.getWorkHistoryFields()
+      label: 'WORK HISTORY'
+    }, education: {
+      id: 'education',
+      label: 'EDUCATION'
     }, skills: {
       id: 'skills',
-      label: 'SKILLS',
-      formFields: this.getHeadingFields()
+      label: 'SKILLS'
     }, summary: {
       id: 'summary',
-      label: 'SUMMARY',
-      formFields: this.getHeadingFields()
+      label: 'SUMMARY'
     }, finalize: {
       id: 'finalize',
-      label: 'FINALIZE',
-      formFields: this.getHeadingFields()
+      label: 'FINALIZE'
     }
   };
 
@@ -95,50 +90,54 @@ export class HomeComponent implements OnInit {
     return val ? val : '[Email]'
   }
 
-  public getSchoolName(formControl: FormControl) : string {    
+  public getSchoolName(formControl: FormControl): string {
     const val = formControl.value.schoolName;
     return val ? val : '[SchoolName]';
   }
 
-  // public getStartYear(formControl: FormControl) : string {  
-    
-  //   if(!formControl.value.startDate)
-  //   {
-  //     return '[StartYear]';
-  //   }
-    
-  //   const val = new Date(formControl.value.startDate).getFullYear().toString();
-  //   return val ? val : '[StartYear]';
-  // }
-
-  // public getEndYear(formControl: FormControl) : string {    
-  //   if(!formControl.value.endDate)
-  //   {
-  //     return '[EndYear]';
-  //   }
-
-  //   const val = new Date(formControl.value.endDate).getFullYear().toString();
-  //   return val ? val : '[EndYear]';
-  // }
-
-  public getFieldOfStudy(formControl: FormControl) : string {    
+  public getFieldOfStudy(formControl: FormControl): string {
     const val = formControl.value.fieldOfStudy;
     return val ? val : '[FieldOfStudy]';
   }
 
-  public getCity(formControl: FormControl) : string {    
+  public getCity(formControl: FormControl): string {
     const val = formControl.value.city;
     return val ? val : '[City]';
   }
 
-  public getCountry(formControl: FormControl) : string {    
+  public getCountry(formControl: FormControl): string {
     const val = formControl.value.country;
     return val ? val : '[Country]';
   }
 
-  public getDegree(formControl: FormControl) : string {    
+  public getDegree(formControl: FormControl): string {
     const val = formControl.value.degree;
     return val ? val : '[Degree]';
+  }
+
+  public getJobTitle(formControl: FormControl): string {
+    const val = formControl.value.jobTitle;
+    return val ? val : '[JobTitle]';
+  }
+
+  public getCompanyName(formControl: FormControl): string {
+    const val = formControl.value.companyName;
+    return val ? val : '[CompanyName]';
+  }
+
+  public getJobDesc(formControl: FormControl): string {
+    const val = formControl.value.jobDesc;
+    return val ? val : '[JobDescription]';
+  }
+
+  public getSkillCategoryName(formControl: FormControl): string {
+    const val = formControl.value.skillCategoryName;
+    return val ? val : '[SkillCategoryName]';
+  }
+
+  public getSkillName(formControl: FormControl): string {
+    const val = formControl.value.skillName;
+    return val ? val : '[Skill]';
   }
 
   public personalDetailForm: FormGroup = this.formBuilder.group({
@@ -238,13 +237,66 @@ export class HomeComponent implements OnInit {
         }
       })
     }
+    if (this.cvBuilder.workExperiance) {
+      this.cvBuilder.workExperiance.workHistorys.forEach((data, index) => {
+        if (index <= this.cvBuilder.workExperiance.workHistorys.length - 1) {
+          if (index === 0) {
+            // Deleted default empty form
+            this.removeForm(index, this.workHistoryForm, 'workHistorys');
+          }
 
+          (this.workHistoryForm.get('workHistorys') as FormArray).push(this.formBuilder.group({
+            jobTitle: [data.jobTitle, Validators.required],
+            companyName: [data.companyName, Validators.required],
+            city: [data.city],
+            country: [data.country],
+            startDate: [data.startDate],
+            endDate: [data.endDate],
+            isWorkingHere: [data.isWorkingHere],
+            jobDesc: [data.jobDesc]
+          }));
+        }
+      })
+    }
+
+    if (this.cvBuilder.skillSet) {
+      this.cvBuilder.skillSet.skillCategorys.forEach((skillCategory, i) => {
+        if (i <= this.cvBuilder.skillSet.skillCategorys.length - 1) {
+          if (i === 0) {
+            // Deleted default empty form
+            this.removeForm(i, this.skillCategoryFormGrp, 'skillCategorys');
+          }
+
+          let skillArray = [];
+          skillCategory.skills.forEach((skill, j) => {
+            console.log(skill);
+            skillArray.push(this.formBuilder.group({
+              skillName: [skill.skillName, Validators.required],
+              skillLevel: [skill.skillLevel, Validators.required]
+            }));
+          });
+
+          (this.skillCategoryFormGrp.get('skillCategorys') as FormArray).push(this.formBuilder.group({
+            skillCategoryName: [skillCategory.skillCategoryName, Validators.required],
+            skills: this.formBuilder.array(skillArray)
+          }));
+
+          // var t = ((this.skillCategoryFormGrp.get('skillCategorys') as FormArray).get('skills') as FormArray)
+          console.log(skillCategory.skills.length)
+        }
+      })
+    }
+
+    if (this.cvBuilder.summary) {
+      this.summaryForm.patchValue(this.cvBuilder.summary);
+    }
 
   }
 
   onSubmit() {
-    console.log(this.educationForm.value);
+    console.log(this.personalDetailForm.value);
     console.log(this.workHistoryForm.value);
+    console.log(this.educationForm.value);
     console.log(this.skillCategoryFormGrp.value);
     console.log(this.summaryForm.value);
   }
@@ -303,290 +355,6 @@ export class HomeComponent implements OnInit {
     control.removeAt(index);
   }
 
-  getHeadingFields() {
-
-    const inputs: FormField<any>[] = [
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'firstName',
-        label: 'First Name',
-        cssClass: 'col-md-6',
-        required: true,
-        order: 1
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'lastName',
-        label: 'Last Name',
-        cssClass: 'col-md-6',
-        required: true,
-        order: 2
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'profession',
-        label: 'Profession',
-        cssClass: 'col-md-12',
-        required: false,
-        order: 3
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'city',
-        label: 'City',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 4
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'state',
-        label: 'State/Region',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 5
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'country',
-        label: 'Country',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 6
-      }),
-
-      new FormField<number>({
-        controlType: "textbox",
-        key: 'postalCode',
-        label: 'Postal Code',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 7
-      }),
-
-      new FormField<number>({
-        controlType: "textbox",
-        key: 'Phone',
-        label: 'Phone',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 8
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'email',
-        label: 'Email',
-        type: 'email',
-        cssClass: 'col-md-6',
-        validator: "email",
-        order: 9
-      })
-
-      // new FormField<string>({
-      //   controlType: "dropdown",
-      //   key: 'country',
-      //   label: 'Country',
-      //   options: [
-      //     {key: 'usa',  value: 'United States of America'},
-      //     {key: 'br',  value: 'Brazil'},
-      //     {key: 'other',   value: 'Other'}
-      //   ],
-      //   order: 3
-      // }),
-
-      // new FormField<string>({
-      //   controlType: "checkbox",
-      //   key: 'agree',
-      //   label: 'I accept terms and services',
-      //   type: 'checkbox',
-      //   required: true,
-      //   order: 4
-      // }),
-
-      // new FormField<string>({
-      //   controlType: "radio",
-      //   key: 'sex',
-      //   label: 'Sex',
-      //   type: 'radio',
-      //   options: [
-      //     {key: 'male',  value: 'Male'},
-      //     {key: 'female',  value: 'Female'}
-      //   ],
-      //   order: 5
-      // }),
-
-      // new FormField<string>({
-      //   controlType: "textarea",
-      //   key: 'message',
-      //   label: 'Mesage',
-      //   type: 'textarea',
-      //   order: 6
-      // })
-    ];
-
-    return of(inputs.sort((a, b) => a.order - b.order));
-  }
-
-  getEducationFields() {
-
-    const inputs: FormField<string>[] = [
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'schoolName',
-        label: 'School Name',
-        cssClass: 'col-md-6',
-        order: 1
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'fieldOfStudy',
-        label: 'Field of Study',
-        cssClass: 'col-md-6',
-        order: 2
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'city',
-        label: 'City',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 3
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'country',
-        label: 'Country',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 4
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'StartDate',
-        label: 'Start Date',
-        cssClass: 'col-md-6',
-        order: 5
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'endDate',
-        label: 'End Date',
-        cssClass: 'col-md-6',
-        order: 6
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'degree',
-        label: 'Degree',
-        cssClass: 'col-md-6',
-        order: 7
-      }),
-
-      new FormField<string>({
-        controlType: "checkbox",
-        key: 'currentSchool',
-        label: 'I currently attend here',
-        type: 'checkbox',
-        cssClass: 'col-md-6',
-        order: 8
-      })
-
-    ];
-
-    return of(inputs.sort((a, b) => a.order - b.order));
-  }
-
-
-  getWorkHistoryFields() {
-
-    const inputs: FormField<string>[] = [
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'jobTitle',
-        label: 'Job Title',
-        cssClass: 'col-md-6',
-        order: 1
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'companyName',
-        label: 'Company Name',
-        cssClass: 'col-md-6',
-        order: 2
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'city',
-        label: 'City',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 3
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'country',
-        label: 'Country',
-        cssClass: 'col-md-6',
-        required: false,
-        order: 4
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'StartDate',
-        label: 'Start Date',
-        cssClass: 'col-md-6',
-        order: 5
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'endDate',
-        label: 'End Date',
-        cssClass: 'col-md-6',
-        order: 6
-      }),
-
-      new FormField<string>({
-        controlType: "checkbox",
-        key: 'currentCompany',
-        label: 'I currently work here',
-        type: 'checkbox',
-        cssClass: 'col-md-12',
-        order: 7
-      }),
-
-      new FormField<string>({
-        controlType: "textbox",
-        key: 'jobDescription',
-        label: 'Job Description',
-        cssClass: 'col-md-12',
-        order: 8
-      })
-
-    ];
-
-    return of(inputs.sort((a, b) => a.order - b.order));
-  }
-
   clickNext(activeTab: any) {
     let keys = Object.keys(this.tabs);
     let nextIndex = keys.indexOf(activeTab) + 1;
@@ -594,12 +362,25 @@ export class HomeComponent implements OnInit {
     //this.active = nextItem;
     this.nav.select(nextItem);
 
-    switch (activeTab) {
+    this.saveInLocal(activeTab);
+  }
+
+  private saveInLocal(tab: any) {
+    switch (tab) {
       case 'personalDetail':
         this.cvBuilder.personalDetail = this.personalDetailForm.value;
         break
       case 'education':
         this.cvBuilder.education = this.educationForm.value;
+        break
+      case 'workHistory':
+        this.cvBuilder.workExperiance = this.workHistoryForm.value;
+        break
+      case 'skills':
+        this.cvBuilder.skillSet = this.skillCategoryFormGrp.value;
+        break
+      case 'summary':
+        this.cvBuilder.summary = this.summaryForm.value;
         break
     }
 
@@ -616,11 +397,26 @@ export class HomeComponent implements OnInit {
         this.educationForm.reset();
         this.cvBuilder.education = '';
         const educationFormArr = <FormArray>this.educationForm.controls['educations'];
-        educationFormArr.controls.forEach((educationData, index) => {
-          if (index !== 0) {
-            this.removeForm(index, this.educationForm, 'educations');
-          }
-        })
+        educationFormArr.clear();
+        this.addEducation();
+        break
+      case 'workHistory':
+        this.workHistoryForm.reset();
+        this.cvBuilder.workExperiance = '';
+        const workHistoryFormArr = <FormArray>this.workHistoryForm.controls['workHistorys'];
+        workHistoryFormArr.clear();
+        this.addWorkExperience();
+        break
+      case 'skills':
+        this.skillCategoryFormGrp.reset();
+        this.cvBuilder.skillSet = '';
+        const skillCategorysFormArr = <FormArray>this.skillCategoryFormGrp.controls['skillCategorys'];
+        skillCategorysFormArr.clear();
+        this.addSkillCategory();
+        break
+      case 'summary':
+        this.summaryForm.reset();
+        this.cvBuilder.summary = '';
         break
     }
     localStorage.setItem("CvBuilder", JSON.stringify(this.cvBuilder));
@@ -629,14 +425,15 @@ export class HomeComponent implements OnInit {
   @ViewChild("nav")
   nav;
 
-  clickPrev(active: any) {
+  clickPrev(tab: any) {
     let keys = Object.keys(this.tabs);
-    let prevIndex = keys.indexOf(active) - 1;
+    let prevIndex = keys.indexOf(tab) - 1;
     let prevItem = keys[prevIndex];
-    //this.active = prevItem;
+    //this.tab = prevItem;
     this.nav.select(prevItem);
+    this.saveInLocal(tab);
   }
 
-  public keepOriginalOrder = (a, b) => a.key;
+
 
 }
