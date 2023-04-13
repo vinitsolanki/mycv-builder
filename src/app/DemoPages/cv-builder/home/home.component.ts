@@ -6,6 +6,8 @@ import { FormField } from '../dynamic-form/form-field';
 import { FormfieldControlService } from '../dynamic-form/formfield-control.service';
 import { of, Observable } from 'rxjs';
 import { CvBuilder } from '../CvBuilder';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-home',
@@ -434,6 +436,22 @@ export class HomeComponent implements OnInit {
     this.saveInLocal(tab);
   }
 
+  exportPDF() {
+    const element = document.getElementById('resume_container') as HTMLElement;
 
+    html2canvas(element, {}).then(canvas => {
+      // console.log(canvas.width)
+      // canvas.width = (600*120/100);
+      // canvas.height = (863*120/100);
+      // console.log(canvas.height)
+      const img = canvas.toDataURL('image/jpeg ', 1.0);
+      console.log(img);
+
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      pdf.addImage(img, 'PNG', 0, 0, 210, 297);
+      pdf.save('resume.pdf');
+    })
+  }
 
 }

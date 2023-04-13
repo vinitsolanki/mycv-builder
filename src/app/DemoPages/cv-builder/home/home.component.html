@@ -435,10 +435,11 @@
       </div>
       <div class="col-lg-6">
         <!-- <script src="https://kit.fontawesome.com/b99e675b6e.js"></script> -->
-        <div class="resume">
+        <div class="resume" id="resume_container">
           <div class="resume_left">
             <div class="resume_profile">
-              <img src="https://i.imgur.com/eCijVBe.png" alt="profile_pic">
+              <!-- <img src="https://i.imgur.com/eCijVBe.png" alt="profile_pic"> -->
+              <img src="./assets/images/eCijVBe.png" alt="profile_pic">
             </div>
             <div class="resume_content">
               <div class="resume_item resume_info">
@@ -624,6 +625,8 @@
             </div>
           </div>
         </div>
+        <button type="button"(click)="exportPDF()" class="btn-shadow btn-wide float-right btn-pill btn-hover-shine btn btn-primary">Export</button>
+                
       </div>
     </div>
   </div>
